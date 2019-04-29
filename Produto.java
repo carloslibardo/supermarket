@@ -3,10 +3,12 @@ public class Produto {
     int id;
     String descricao;
     double preco;
-    public Produto(String descricao, double preco) {
+    String setor;
+    public Produto(String descricao, double preco, String setor) {
         this.id = ++Produto.count;
         this.descricao = descricao;
         this.preco = preco;
+        this.setor = setor;
     }
 
     @Override

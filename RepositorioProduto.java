@@ -80,4 +80,8 @@ public abstract class RepositorioProduto {
             System.out.println(qtd.toString() + "x " + produto.toString());
         }
     }
+
+    public void mostrarDetalhes(Produto produto){
+        System.out.println(produto.toString() + " | Setor: " + produto.setor);
+    }
 }
