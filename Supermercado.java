@@ -23,10 +23,10 @@ public class Supermercado {
 			System.out.println("Comando: " + comando);
 			switch (comando) {
 			case "lista":
-				mercado.estoque.mostrarProdutos();
+				mercado.estoque.mostrarProdutos(false);
 				break;
 			case "carrinho":
-				carrinho.mostrarProdutos();
+				carrinho.mostrarProdutos(true);
 				break;
 			case "detalhes": {
 				if (tokens.length < 2) {
@@ -38,20 +38,36 @@ public class Supermercado {
 				mercado.estoque.mostrarDetalhes(produto);
 				break;
 			}
-			case "comprar":
+			case "comprar": {
 				if (tokens.length < 3) {
-					System.out.println("Formato inválido: o formato de comprar deve ser 'comprar {ID DO PRODUTO} {QUANTIDADE DO PRODUTO}'");
+					System.out.println(
+							"Formato inválido: o formato de comprar deve ser 'comprar {ID DO PRODUTO} {QUANTIDADE DO PRODUTO}'");
 					break;
 				}
 				int id = Integer.parseInt(tokens[1]);
 				int qtd = Integer.parseInt(tokens[2]);
 				Produto produto = mercado.estoque.procurarProduto(id);
 				carrinho.pegarProdutoDe(mercado.estoque, produto, qtd);
-				// this.estoque;
+				System.out.println("Foi adicionado " + qtd + " " + produto.descricao + " no seu carrinho!");
+				break;
+			}
+			// this.estoque;
+			case "remove": {
+				if (tokens.length < 3) {
+					System.out.println(
+							"Formato inválido: o formato de remover um produto deve ser 'remove {ID DO PRODUTO} {QUANTIDADE DO PRODUTO}'");
+					break;
+				}
+				int id = Integer.parseInt(tokens[1]);
+				int qtd = Integer.parseInt(tokens[2]);
+				Produto produto = mercado.estoque.procurarProduto(id);
+				mercado.estoque.pegarProdutoDe(carrinho, produto, qtd);
+				System.out.println("Foi removido " + qtd + " " + produto.descricao + " do seu carrinho!");
+				break;
+			}
 			default:
 				System.out.println("Comando inexistente, tente novamente");
 			}
-			
 
 		}
 		sc.close(); // Encerra o programa

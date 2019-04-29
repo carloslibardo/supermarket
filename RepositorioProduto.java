@@ -21,17 +21,18 @@ class ProdutoInexistente extends Exception {
 
 public abstract class RepositorioProduto {
     Map<Produto, Integer> produtos;
+
     public RepositorioProduto(Map<Produto, Integer> produtos) {
         this.produtos = produtos;
     }
 
     private void setQuantidadeProduto(Produto produto, Integer num) {
         Integer qtd = this.produtos.get(produto).intValue();
-        this.produtos.put(produto, qtd+num);
+        this.produtos.put(produto, qtd + num);
     }
 
     public Produto procurarProduto(int id) throws ProdutoInexistente {
-        for (Produto produto: this.produtos.keySet()) {
+        for (Produto produto : this.produtos.keySet()) {
             if (produto.id == id) {
                 return produto;
             }
@@ -49,7 +50,7 @@ public abstract class RepositorioProduto {
         }
         Integer qtdInt = this.produtos.get(produto);
         int qtd = qtdInt != null ? qtdInt.intValue() : 0;
-        this.produtos.put(produto, qtd+num);
+        this.produtos.put(produto, qtd + num);
     }
 
     public void removerProduto(Produto produto, Integer num) throws QuantidadeInvalida, QuantidadeInsuficiente {
@@ -59,12 +60,18 @@ public abstract class RepositorioProduto {
         Integer qtdInt = this.produtos.get(produto);
         int qtd = qtdInt != null ? qtdInt.intValue() : 0;
         if (qtd < num) {
-            throw new QuantidadeInsuficiente("ocorreu uma tentativa de remoção de mais produtos do que há no repositório");
+            throw new QuantidadeInsuficiente(
+                    "ocorreu uma tentativa de remoção de mais produtos do que há no repositório");
         }
-        this.produtos.put(produto, qtd-num);
+        if (qtd - num == 0){
+            this.produtos.remove(produto);
+        } else {
+            this.produtos.put(produto, qtd - num);
+        }
     }
 
-    public void pegarProdutoDe(RepositorioProduto outro, Produto produto, Integer qtd) throws QuantidadeInsuficiente, QuantidadeInvalida {
+    public void pegarProdutoDe(RepositorioProduto outro, Produto produto, Integer qtd)
+            throws QuantidadeInsuficiente, QuantidadeInvalida {
         try {
             outro.removerProduto(produto, qtd);
         } catch (QuantidadeInsuficiente e) {
@@ -73,15 +80,20 @@ public abstract class RepositorioProduto {
         this.adicionarProduto(produto, qtd);
     }
 
-    public void mostrarProdutos() {
+    public void mostrarProdutos(Boolean mostrarTotal) {
+        Double precoTotal = 0.0;
         for (Map.Entry<Produto, Integer> entry : this.produtos.entrySet()) {
             Produto produto = entry.getKey();
             Integer qtd = entry.getValue();
+            precoTotal += qtd * produto.preco;
             System.out.println(qtd.toString() + "x " + produto.toString());
+        }
+        if (mostrarTotal) {
+            System.out.println("Preço total da compra é de R$:" + precoTotal);
         }
     }
 
-    public void mostrarDetalhes(Produto produto){
+    public void mostrarDetalhes(Produto produto) {
         System.out.println(produto.toString() + " | Setor: " + produto.setor);
     }
 }
