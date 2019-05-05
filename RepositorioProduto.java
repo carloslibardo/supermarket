@@ -70,6 +70,10 @@ public abstract class RepositorioProduto {
         }
     }
 
+    public void esvaziar() {
+        this.produtos.clear();
+    }
+
     public void pegarProdutoDe(RepositorioProduto outro, Produto produto, Integer qtd)
             throws QuantidadeInsuficiente, QuantidadeInvalida {
         try {
@@ -80,16 +84,11 @@ public abstract class RepositorioProduto {
         this.adicionarProduto(produto, qtd);
     }
 
-    public void mostrarProdutos(Boolean mostrarTotal) {
-        Double precoTotal = 0.0;
+    public void mostrarProdutos() {
         for (Map.Entry<Produto, Integer> entry : this.produtos.entrySet()) {
             Produto produto = entry.getKey();
             Integer qtd = entry.getValue();
-            precoTotal += qtd * produto.preco;
             System.out.println(qtd.toString() + "x " + produto.toString());
-        }
-        if (mostrarTotal) {
-            System.out.println("Preço total da compra é de R$:" + precoTotal);
         }
     }
 

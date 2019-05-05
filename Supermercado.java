@@ -1,5 +1,4 @@
 import java.util.Map;
-import java.util.Scanner;
 
 public class Supermercado {
 	Estoque estoque;
@@ -8,68 +7,70 @@ public class Supermercado {
 		this.estoque = estoque;
 	}
 
-	public static void main(String[] args) throws QuantidadeInsuficiente, QuantidadeInvalida, ProdutoInexistente {
-		Supermercado mercado = new Supermercado(Estoque.defaultEstoque());
-		Carrinho carrinho = new Carrinho();
-		Scanner sc = new Scanner(System.in);
-		System.out
-				.print("Comandos disponíveis: 'lista', 'carrinho', 'detalhes' e 'comprar' \nDigite um dos comandos acima!\n");
-		System.out
-				.print("Para realizar a compra, deve-se digitar o comando 'comprar {ID DO PRODUTO} {QUANTIDADE DO PRODUTO}'\n");
-		System.out.print("Para saber detalhes do produto, deve-se digitar o comando 'detalhes {ID DO PRODUTO}'\n");
-		while (sc.hasNext()) {
-			String[] tokens = sc.nextLine().split("\\s");
-			String comando = tokens[0];
-			System.out.println("Comando: " + comando);
-			switch (comando) {
-			case "lista":
-				mercado.estoque.mostrarProdutos(false);
-				break;
-			case "carrinho":
-				carrinho.mostrarProdutos(true);
-				break;
-			case "detalhes": {
-				if (tokens.length < 2) {
-					System.out.println("Formato inválido: o formato de detalhes deve ser 'detalhes {ID DO PRODUTO}'");
-					break;
-				}
-				int id = Integer.parseInt(tokens[1]);
-				Produto produto = mercado.estoque.procurarProduto(id);
-				mercado.estoque.mostrarDetalhes(produto);
-				break;
-			}
-			case "comprar": {
-				if (tokens.length < 3) {
-					System.out.println(
-							"Formato inválido: o formato de comprar deve ser 'comprar {ID DO PRODUTO} {QUANTIDADE DO PRODUTO}'");
-					break;
-				}
-				int id = Integer.parseInt(tokens[1]);
-				int qtd = Integer.parseInt(tokens[2]);
-				Produto produto = mercado.estoque.procurarProduto(id);
-				carrinho.pegarProdutoDe(mercado.estoque, produto, qtd);
-				System.out.println("Foi adicionado " + qtd + " " + produto.descricao + " no seu carrinho!");
-				break;
-			}
-			// this.estoque;
-			case "remove": {
-				if (tokens.length < 3) {
-					System.out.println(
-							"Formato inválido: o formato de remover um produto deve ser 'remove {ID DO PRODUTO} {QUANTIDADE DO PRODUTO}'");
-					break;
-				}
-				int id = Integer.parseInt(tokens[1]);
-				int qtd = Integer.parseInt(tokens[2]);
-				Produto produto = mercado.estoque.procurarProduto(id);
-				mercado.estoque.pegarProdutoDe(carrinho, produto, qtd);
-				System.out.println("Foi removido " + qtd + " " + produto.descricao + " do seu carrinho!");
-				break;
-			}
-			default:
-				System.out.println("Comando inexistente, tente novamente");
+
+	void mostrarPrompt() {
+		System.out.print("> ");
+	}
+
+	void receberCliente(Cliente cliente) {
+		System.out.println("Comandos disponíveis: 'lista', 'carrinho', 'detalhes' e 'comprar'");
+		System.out.println("Digite um dos comandos acima!");
+		System.out.println("Para realizar a compra, deve-se digitar o comando 'comprar {ID DO PRODUTO} {QUANTIDADE DO PRODUTO}'");
+		System.out.println("Para saber detalhes do produto, deve-se digitar o comando 'detalhes {ID DO PRODUTO}'");
+		this.mostrarPrompt();
+		while (cliente.estaComprando()) {
+			Comando comando;
+			try {
+				comando = cliente.receberComando();
+			} catch (ComandoInvalido e) {
+				System.out.println(e);
+				this.mostrarPrompt();
+				continue;
 			}
 
+			try {
+				switch (comando.nome) {
+					case "lista":
+						this.estoque.mostrarProdutos();
+						break;
+					case "carrinho":
+						cliente.carrinho.mostrarProdutos();
+						break;
+					case "detalhes": {
+						Produto produto = this.estoque.procurarProduto(comando.idProduto);
+						this.estoque.mostrarDetalhes(produto);
+						break;
+					}
+					case "comprar": {
+						Produto produto = this.estoque.procurarProduto(comando.idProduto);
+						cliente.carrinho.pegarProdutoDe(this.estoque, produto, comando.qtd);
+						System.out.println("Foi adicionado " + comando.qtd + " " + produto.descricao + " no seu carrinho!");
+						break;
+					}
+					case "remove": {
+						Produto produto = this.estoque.procurarProduto(comando.idProduto);
+						this.estoque.pegarProdutoDe(cliente.carrinho, produto, comando.qtd);
+						System.out.println("Foi removido " + comando.qtd + " " + produto.descricao + " do seu carrinho!");
+						break;
+					}
+					case "finalizar": {
+						System.out.println("O total da compra é R$" + cliente.carrinho.totalDaCompra());
+						cliente.carrinho.esvaziar();
+						break;
+					}
+				}
+				this.mostrarPrompt();
+			} catch (Exception e) {
+				System.out.println(e);
+				this.mostrarPrompt();
+				continue;
+			}
 		}
-		sc.close(); // Encerra o programa
+	}
+
+	public static void main(String[] args){
+		Supermercado mercado = new Supermercado(Estoque.defaultEstoque());
+		Cliente cliente = new Cliente();
+		mercado.receberCliente(cliente);
 	}
 }
