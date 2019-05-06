@@ -1,5 +1,3 @@
-import java.util.Map;
-
 public class Supermercado {
 	Estoque estoque;
 
@@ -12,11 +10,21 @@ public class Supermercado {
 		System.out.print("> ");
 	}
 
+	void mostrarBoasVindas() {
+		System.out.println("╔═════════════════════╦══════════════════════════════════════╦═════════════════════╗");
+		System.out.println("║                     ║ Seja bem-vindo ao Supermercado 2000! ║                     ║");
+		System.out.println("║                     ╚══════════════════════════════════════╝                     ║");
+		System.out.println("║ lista                - lista os items no estoque do supermercado                 ║");
+		System.out.println("║ detalhes [ID]        - mostra os detalhes do produto com ID=[ID]                 ║");
+		System.out.println("║ comprar  [ID] [QTD]  - adiciona [QTD] produtos com ID=[ID] ao carrinho           ║");
+		System.out.println("║ remove   [ID] [QTD]  - remove [QTD] produtos com ID=[ID] do carrinho             ║");
+		System.out.println("║ carrinho             - mostra os items no carrinho                               ║");
+		System.out.println("║ finalizar            - mostra o valor total dos produtos adicionados ao carrinho ║");
+		System.out.println("╚══════════════════════════════════════════════════════════════════════════════════╝");
+	}
+
 	void receberCliente(Cliente cliente) {
-		System.out.println("Comandos disponíveis: 'lista', 'carrinho', 'detalhes' e 'comprar'");
-		System.out.println("Digite um dos comandos acima!");
-		System.out.println("Para realizar a compra, deve-se digitar o comando 'comprar {ID DO PRODUTO} {QUANTIDADE DO PRODUTO}'");
-		System.out.println("Para saber detalhes do produto, deve-se digitar o comando 'detalhes {ID DO PRODUTO}'");
+		this.mostrarBoasVindas();
 		this.mostrarPrompt();
 		while (cliente.estaComprando()) {
 			Comando comando;
