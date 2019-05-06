@@ -46,7 +46,7 @@ public class Supermercado {
 						break;
 					case "detalhes": {
 						Produto produto = this.estoque.procurarProduto(comando.idProduto);
-						produto.mostrarDetalhes(produto);
+						produto.mostrarDetalhes();
 						break;
 					}
 					case "comprar": {
@@ -77,7 +77,7 @@ public class Supermercado {
 	}
 
 	public static void main(String[] args) {
-		Estoque estoque = Estoque.estoquePadrao();
+		Estoque estoque = EstoqueImpl.estoquePadrao();
 		Supermercado mercado = new Supermercado(estoque);
 		Cliente cliente = new Cliente();
 		mercado.receberCliente(cliente);

@@ -1,4 +1,4 @@
-public class Produto implements ProdutoInt {
+public class Produto {
     static int count = 0;
     int id;
     String descricao;
@@ -15,7 +15,7 @@ public class Produto implements ProdutoInt {
         return "ID:" + this.id + " | " + this.descricao + " | R$"+ this.preco;
     }
 
-    public void mostrarDetalhes(Produto produto) {
-        System.out.println(produto.mostrarInfos() + " | Setor: " + produto.setor);
+    public void mostrarDetalhes() {
+        System.out.println(this.mostrarInfos() + " | Setor: " + this.setor);
     }
 }
