@@ -1,6 +1,10 @@
 import java.util.Map;
 import java.lang.Exception;
 
+interface ProdutoFonte {
+    void removerProduto(Produto produto, Integer num) throws QuantidadeInvalida, QuantidadeInsuficiente;
+}
+
 class QuantidadeInvalida extends Exception {
     public QuantidadeInvalida(String message) {
         super(message);
@@ -74,7 +78,7 @@ public abstract class RepositorioProduto {
         this.produtos.clear();
     }
 
-    public void pegarProdutoDe(RepositorioProduto outro, Produto produto, Integer qtd)
+    public void pegarProdutoDe(ProdutoFonte outro, Produto produto, Integer qtd)
             throws QuantidadeInsuficiente, QuantidadeInvalida {
         try {
             outro.removerProduto(produto, qtd);

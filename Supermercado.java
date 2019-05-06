@@ -76,8 +76,9 @@ public class Supermercado {
 		}
 	}
 
-	public static void main(String[] args){
-		Supermercado mercado = new Supermercado(Estoque.defaultEstoque());
+	public static void main(String[] args) {
+		Estoque estoque = EstoqueImpl.estoquePadrao();
+		Supermercado mercado = new Supermercado(estoque);
 		Cliente cliente = new Cliente();
 		mercado.receberCliente(cliente);
 	}
