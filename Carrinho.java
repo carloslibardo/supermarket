@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class Carrinho extends RepositorioProduto {
+public class Carrinho extends RepositorioProduto implements ProdutoFonte {
     public Carrinho() {
         super(new HashMap<Produto, Integer>());
     }

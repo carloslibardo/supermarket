@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class EstoqueImpl extends RepositorioProduto implements Estoque {
+public class EstoqueImpl extends RepositorioProduto implements Estoque, ProdutoFonte  {
     public EstoqueImpl(Map<Produto, Integer> produtos) {
         super(produtos);
     }
