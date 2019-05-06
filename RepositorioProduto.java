@@ -92,11 +92,7 @@ public abstract class RepositorioProduto {
         for (Map.Entry<Produto, Integer> entry : this.produtos.entrySet()) {
             Produto produto = entry.getKey();
             Integer qtd = entry.getValue();
-            System.out.println(qtd.toString() + "x " + produto.toString());
+            System.out.println(qtd.toString() + "x " + produto.mostrarInfos());
         }
-    }
-
-    public void mostrarDetalhes(Produto produto) {
-        System.out.println(produto.toString() + " | Setor: " + produto.setor);
     }
 }
